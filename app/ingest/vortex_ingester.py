@@ -24,8 +24,8 @@ class VortexIngester:
 
     def ingest(self) -> None:
         """Perform ingestion from the content folder."""
-        self._process_content()
-        self._create_and_persist_vector_store()
+        chunks = self._process_content()
+        self._create_and_persist_vector_store(chunks)
 
     def _process_content(self) -> List[docstore.Document]:
         """Process content and return list of document chunks.

@@ -3,12 +3,14 @@ import textwrap
 
 DEFAULT_WIDTH = 110
 
+
 def wrap_text_preserve_newlines(text, width=DEFAULT_WIDTH):
-    """Wrap text preserving new lines. 
+    """Wrap text preserving new lines.
 
     Args:
         text (str): Text to wrap.
-        width (int, optional): The maximum length of wrapped lines. Defaults to DEFAULT_WIDTH.
+        width (int, optional): The maximum length of wrapped lines. Defaults to
+        DEFAULT_WIDTH.
 
     Returns:
         str: Wrapped text preserving new lines.
@@ -16,6 +18,7 @@ def wrap_text_preserve_newlines(text, width=DEFAULT_WIDTH):
     lines = text.split('\n')
     wrapped_lines = [textwrap.fill(line, width=width) for line in lines]
     return '\n'.join(wrapped_lines)
+
 
 def display_response(llm_response):
     """Prints formatted LLM response.
@@ -27,6 +30,7 @@ def display_response(llm_response):
     print('\n\nSources:')
     for source in llm_response["source_documents"]:
         print(source.metadata['source'])
+
 
 def main():
     """Main function to prompt user for question and print response."""

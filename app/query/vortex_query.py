@@ -1,12 +1,9 @@
 from langchain.chains import RetrievalQA
 from langchain.embeddings import HuggingFaceInstructEmbeddings
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.llms import HuggingFacePipeline
-from langchain.schema import AIMessage, HumanMessage
 from langchain.vectorstores.chroma import Chroma
 
 import torch
-import transformers
 from transformers import LlamaTokenizer, LlamaForCausalLM, pipeline
 
 from settings import COLLECTION_NAME, PERSIST_DIRECTORY
@@ -35,8 +32,8 @@ class VortexQuery:
 
         generation_pipe = pipeline(
             "text-generation",
-            model=model, 
-            tokenizer=tokenizer, 
+            model=model,
+            tokenizer=tokenizer,
             max_length=1024,
             temperature=0,
             top_p=0.95,
@@ -58,9 +55,9 @@ class VortexQuery:
 
         retriever = vector_store.as_retriever(search_kwargs={"k": 3})
 
-        return RetrievalQA.from_chain_type(llm=local_llm, 
-                                           chain_type="stuff", 
-                                           retriever=retriever, 
+        return RetrievalQA.from_chain_type(llm=local_llm,
+                                           chain_type="stuff",
+                                           retriever=retriever,
                                            return_source_documents=True)
 
     def ask_question(self, question: str):
