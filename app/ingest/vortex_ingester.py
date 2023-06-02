@@ -1,4 +1,3 @@
-from tabnanny import verbose
 from typing import List
 from langchain.embeddings import HuggingFaceInstructEmbeddings
 

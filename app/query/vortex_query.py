@@ -1,7 +1,9 @@
 from dotenv import load_dotenv
 from langchain.chains import ConversationalRetrievalChain
-from langchain.chat_models import ChatOpenAI
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.embeddings import HuggingFaceInstructEmbeddings
+
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.llms import GPT4All
 from langchain.schema import AIMessage, HumanMessage
 from langchain.vectorstores.chroma import Chroma
 
@@ -15,21 +17,32 @@ class VortexQuery:
         self.chat_history = []
 
     def make_chain(self):
-        model = ChatOpenAI(
-            client=None,
-            model="gpt-3.5-turbo",
-            temperature=0,
-        )
-        embedding = OpenAIEmbeddings(client=None)
+
+        # embeddings_model_name = ''
+        # model_type = ''
+        model_path = ''
+        model_n_ctx = ''
+        # target_source_chunks = 10000
+
+        callbacks = [StreamingStdOutCallbackHandler()]
+
+        llm = GPT4All(model=model_path, 
+                      n_ctx=model_n_ctx, 
+                      backend='gptj', 
+                      callbacks=callbacks, verbose=False)
+
+        instructor_embeddings = HuggingFaceInstructEmbeddings(
+                                  model_name="hkunlp/instructor-xl",
+                                  model_kwargs={"device": "cpu"})
 
         vector_store = Chroma(
             collection_name=COLLECTION_NAME,
-            embedding_function=embedding,
+            embedding_function=instructor_embeddings,
             persist_directory=PERSIST_DIRECTORY,
         )
 
         return ConversationalRetrievalChain.from_llm(
-            model,
+            llm,
             retriever=vector_store.as_retriever(),
             return_source_documents=True,
         )
