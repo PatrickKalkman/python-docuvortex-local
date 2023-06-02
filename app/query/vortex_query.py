@@ -1,46 +1,39 @@
-from dotenv import load_dotenv
 from langchain.chains import RetrievalQA
 from langchain.embeddings import HuggingFaceInstructEmbeddings
-
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.llms import HuggingFacePipeline
-
 from langchain.schema import AIMessage, HumanMessage
 from langchain.vectorstores.chroma import Chroma
 
 import torch
 import transformers
-from transformers import LlamaTokenizer, LlamaForCausalLM, GenerationConfig, pipeline
+from transformers import LlamaTokenizer, LlamaForCausalLM, pipeline
 
 from settings import COLLECTION_NAME, PERSIST_DIRECTORY
 
 
 class VortexQuery:
+    """Handles querying using the Vortex mechanism."""
+
     def __init__(self):
-        load_dotenv()
-        self.chain = self.make_chain()
-        self.chat_history = []
+        """Initialize the VortexQuery class."""
+        self.chain = self._initialize_chain()
 
-    def make_chain(self):
+    def _initialize_chain(self):
+        """Initialize the retrieval chain.
 
-        # embeddings_model_name = ''
-        # model_type = ''
-        model_path = ''
-        model_n_ctx = ''
-        # target_source_chunks = 10000
-
-        callbacks = [StreamingStdOutCallbackHandler()]
-
+        Returns:
+            RetrievalQA: A configured retrieval chain.
+        """
         tokenizer = LlamaTokenizer.from_pretrained("TheBloke/wizardLM-7B-HF")
-
         model = LlamaForCausalLM.from_pretrained("TheBloke/wizardLM-7B-HF",
-                                                      load_in_8bit=True,
-                                                      device_map='auto',
-                                                      torch_dtype=torch.float16,
-                                                      low_cpu_mem_usage=True
-                                                      )
+                                                 load_in_8bit=True,
+                                                 device_map='auto',
+                                                 torch_dtype=torch.float16,
+                                                 low_cpu_mem_usage=True
+                                                 )
 
-        pipe = pipeline(
+        generation_pipe = pipeline(
             "text-generation",
             model=model, 
             tokenizer=tokenizer, 
@@ -50,11 +43,12 @@ class VortexQuery:
             repetition_penalty=1.15
         )
 
-        local_llm = HuggingFacePipeline(pipeline=pipe)
+        local_llm = HuggingFacePipeline(pipeline=generation_pipe)
 
         instructor_embeddings = HuggingFaceInstructEmbeddings(
-                                  model_name="hkunlp/instructor-xl",
-                                  model_kwargs={"device": "cuda"})
+            model_name="hkunlp/instructor-xl",
+            model_kwargs={"device": "cuda"}
+        )
 
         vector_store = Chroma(
             collection_name=COLLECTION_NAME,
@@ -65,13 +59,17 @@ class VortexQuery:
         retriever = vector_store.as_retriever(search_kwargs={"k": 3})
 
         return RetrievalQA.from_chain_type(llm=local_llm, 
-                                          chain_type="stuff", 
-                                          retriever=retriever, 
-                                          return_source_documents=True)
+                                           chain_type="stuff", 
+                                           retriever=retriever, 
+                                           return_source_documents=True)
 
     def ask_question(self, question: str):
-        response = self.chain(question)
+        """Ask a question through the retrieval chain.
 
-        return response
+        Args:
+            question (str): The question to be asked.
 
-
+        Returns:
+            Response: The response from the retrieval chain.
+        """
+        return self.chain(question)

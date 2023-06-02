@@ -1,41 +1,42 @@
 from query.vortex_query import VortexQuery
 import textwrap
 
-def wrap_text_preserve_newlines(text, width=110):
-    # Split the input text into lines based on newline characters
+DEFAULT_WIDTH = 110
+
+def wrap_text_preserve_newlines(text, width=DEFAULT_WIDTH):
+    """Wrap text preserving new lines. 
+
+    Args:
+        text (str): Text to wrap.
+        width (int, optional): The maximum length of wrapped lines. Defaults to DEFAULT_WIDTH.
+
+    Returns:
+        str: Wrapped text preserving new lines.
+    """
     lines = text.split('\n')
-
-    # Wrap each line individually
     wrapped_lines = [textwrap.fill(line, width=width) for line in lines]
+    return '\n'.join(wrapped_lines)
 
-    # Join the wrapped lines back together using newline characters
-    wrapped_text = '\n'.join(wrapped_lines)
+def display_response(llm_response):
+    """Prints formatted LLM response.
 
-    return wrapped_text
-
-def process_llm_response(llm_response):
+    Args:
+        llm_response (dict): Response from LLM.
+    """
     print(wrap_text_preserve_newlines(llm_response['result']))
     print('\n\nSources:')
     for source in llm_response["source_documents"]:
         print(source.metadata['source'])
 
 def main():
+    """Main function to prompt user for question and print response."""
     vortex_query = VortexQuery()
 
     while True:
         print()
         question = input("Question: ")
-
         answer = vortex_query.ask_question(question)
-
-        process_llm_response(answer)
-
-        # print("\n\nSources:\n")
-        # for document in source:
-        #     print(f"Page: {document.metadata['page_number']}")
-        #     print(f"Text chunk: {document.page_content[:160]}...\n")
-        # print(f"Answer: {answer}")
-
+        display_response(answer)
 
 
 if __name__ == "__main__":
