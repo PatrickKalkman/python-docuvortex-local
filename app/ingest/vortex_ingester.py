@@ -29,7 +29,7 @@ class VortexIngester:
 
         instructor_embeddings = HuggingFaceInstructEmbeddings(
                                   model_name="hkunlp/instructor-xl",
-                                  model_kwargs={"device": "cpu"})
+                                  model_kwargs={"device": "cuda"})
 
         logger.info("Loaded embeddings")
         vector_store = Chroma.from_documents(

@@ -95,9 +95,9 @@ class VortexPdfParser:
         for page_num, page in text:
             logger.info(f"Splitting page {page_num}")
             text_splitter = splitter.RecursiveCharacterTextSplitter(
-                chunk_size=1000,
+                chunk_size=500,
                 separators=["\n\n", "\n", ".", "!", "?", ",", " ", ""],
-                chunk_overlap=200,
+                chunk_overlap=100,
             )
             chunks = text_splitter.split_text(page)
             for i, chunk in enumerate(chunks):
