@@ -9,5 +9,6 @@ chromadb==0.3.25
 InstructorEmbedding==1.0.1
 accelerate==0.19.0
 bitsandbytes==0.39.0
-sentencepiece=0.1.99
-Xformers=0.0.20
+sentencepiece==0.1.99
+Xformers==0.0.20
+sentence_transformers==2.2.2
