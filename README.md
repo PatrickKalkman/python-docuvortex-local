@@ -1,10 +1,10 @@
-# NeonShield's DocuVortex Evolution - From OpenAI to PrivateGPT
+# Harnessing Local Language Models - A Guide to Transitioning From OpenAI to On-Premise Power
 
 ## Exploring alternative large language models for enhanced document management
 
 ![DocuVortex](/article_image.jpg "DocuVortex")
 
-This project aims to implement a document-based question-answering system using a local LLM model, Python, and the Langchain Framework. It processes PDF documents, breaking them into ingestible chunks, and then stores these chunks into a Chroma DB vector database for querying. It complements a Medium article called [NeonShield's DocuVortex Evolution - From OpenAI to PrivateGPT](https://medium.com/@pkalkman).
+This project aims to implement a document-based question-answering system using a local LLM model, Python, and the Langchain Framework. It processes PDF documents, breaking them into ingestible chunks, and then stores these chunks into a Chroma DB vector database for querying. It complements a Medium article called [Harnessing Local Language Models - A Guide to Transitioning From OpenAI to On-Premise Power](https://medium.com/@pkalkman).
 
 ## Getting Started
 
@@ -19,8 +19,7 @@ To install the project, you need to have [Python](https://www.python.org/downloa
 The project uses [Poetry](https://python-poetry.org/) for managing dependencies. After cloning the repository, navigate to the project directory and install dependencies with the following commands:
 
 ```bash
-poetry install
-poetry shell
+pip install -r requirements
 ```
 
 ## Running the Application
@@ -42,12 +41,6 @@ cd app
 python query.py
 ```
 
-### Running the Streamlit App
-To visualize and interact with the system via the Streamlit app, run the following command:
-
-```bash
-streamlit run streamlit_app.py
-```
 
 ### Authors
 [Patrick Kalkman](https://github.com/PatrickKalkman)
