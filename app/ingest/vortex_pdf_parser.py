@@ -1,6 +1,6 @@
 import os
 import re
-from datetime import date, datetime
+from datetime import datetime
 from typing import Callable, Dict, List, Tuple
 
 import langchain.docstore.document as docstore

@@ -12,3 +12,4 @@ bitsandbytes==0.39.0
 sentencepiece==0.1.99
 Xformers==0.0.20
 sentence_transformers==2.2.2
+PyCryptodome==3.18.0
