@@ -12,11 +12,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-To install the project, you need to have [Python](https://www.python.org/downloads/) installed on your machine.
+To install the project, you need to have [Python](https://www.python.org/downloads/) installed on your machine. Also you need a machine with a cuda compatible GPU. If you want to run the application on the CPU, you need to change the cuda references in the code to cpu.
 
 ### Installing
 
-The project uses [Poetry](https://python-poetry.org/) for managing dependencies. After cloning the repository, navigate to the project directory and install dependencies with the following commands:
+The project uses several dependencies. After cloning the repository, navigate to the project directory and install dependencies with the following commands:
 
 ```bash
 pip install -r requirements
