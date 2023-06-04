@@ -51,4 +51,3 @@ This project is licensed under the MIT license - see the LICENSE.md file for det
 ### Acknowledgments
 - [Langchain Framework](https://python.langchain.com/en/latest/index.html)
 - [Chroma DB](https://www.trychroma.com/)
-- [Streamlit](https://streamlit.io/)

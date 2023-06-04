@@ -1,6 +1,6 @@
 import os
 import re
-from datetime import datetime
+from datetime import date
 from typing import Callable, Dict, List, Tuple
 
 import langchain.docstore.document as docstore
@@ -47,26 +47,14 @@ class VortexPdfParser:
             metadata = reader.metadata
             logger.info(f"{getattr(metadata, 'title', 'no title')}")
 
-            creation_date = self.parse_pdf_date(
-                getattr_or_default(metadata, 'creation_date', 'D:19000101000000'))
+            creation_date = getattr_or_default(metadata, 'creation_date',
+                                               date(1900, 1, 1))
 
             return {
                 "title": getattr_or_default(metadata, 'title', '').strip(),
                 "author": getattr_or_default(metadata, 'author', '').strip(),
                 "creation_date": creation_date.strftime('%Y-%m-%d'),
             }
-
-    def parse_pdf_date(self, pdf_date: str):
-        """Parse date from PDF date string format 'D:YYYYMMDDHHMMSS'."""
-        date_str = pdf_date[2:]  # remove the "D:" prefix
-        try:
-            # Try to parse date without timezone
-            date_to_return = datetime.strptime(date_str, "%Y%m%d%H%M%S")
-        except ValueError:
-            # If that fails, return a default date
-            date_to_return = datetime(1900, 1, 1)
-
-        return date_to_return
 
     def extract_pages_from_pdf(self) -> List[Tuple[int, str]]:
         """Extract and return the text of each page from the PDF."""
